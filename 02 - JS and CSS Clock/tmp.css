@@ -1,0 +1,38 @@
+:root {
+    --hand-length: 50%;
+    --hand-top: 50%;
+    --hand-left: 0%;
+}
+
+.hand {
+    width:var(--hand-length);
+    height: 10px; /*because we rotated, this is actually the width of each hand*/
+    background: black;
+    position: absolute;
+    top: var(--hand-length);
+    left:var(--hand-left);
+    transform-origin: 100%; 
+    transform: rotate(90deg);
+    transition: all 0.05s;
+    transition-timing-function: cubic-bezier(0.1,2.7,0.58,1); 
+}
+
+.second-hand{
+    background:yellow;
+    width:var(--hand-length);
+    top: var(--hand-top);
+    left: var(--hand-left);
+}
+ 
+.min-hand{
+    background:green;
+    width:calc(var(--hand-length) * .75);
+    top: var(--hand-top);
+    left:12.5%;
+}
+.hour-hand{
+    background:red;
+    width:calc(var(--hand-length) * .5);
+    left:25%;
+    top: var(--hand-top);
+}

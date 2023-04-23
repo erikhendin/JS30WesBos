@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+<!-- 
+  We have a div for each of the keys we will press with a data-key value for the key code
+  We have an audio tag/an audio file corresponding with a data-key value for the key code
+  the key code - numeric value for each key pressed (i.e. data-key=75)
+-->
+<!-- go to keycode.info and press keys - you will see the code for each key-->
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <!-- explanation: what is "data-key"?
+    data-key is essentially a data attribute
+    to use data-attributes in html that you choose
+    - you can use "data-" followed by a name you yourself determine
+    here we are using "data-key" (presumably because it is to refer to the value for the corresponding key being pressed)
+    Here we are using data attributes to "hook up"
+    the key code for each key press with each audio file
+    -->
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <!-- Note reference here to the data-key
+  This is how we associate the keystroke with the audio file
+  -->
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+<script>
+
+ function playSound(e){
+  // set up variables to store elements which have key code 
+  // this is for the audio file with the data key 
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+  if(!audio) return; // stop function from running altogether
+
+  // rewind the audio file to start each time the file will be played
+  audio.currentTime = 0; // this prevents problem where audio won't play because it has already been played
+  audio.play(); 
+  //console.log(key);
+  key.classList.add('playing');  // add the class playing (has transition)
+ }
+
+ function removeTransition(e){
+  if(e.propertyName !== 'transform') return; // skip it if it's not the transform property
+  //console.log(e.propertyName);
+  // remove the class with the transition (".playing")
+  //e.target.classList.remove
+  this.classList.remove('playing');  // "this" > is equal to the key 
+ }
+
+
+ const keys = document.querySelectorAll('.key');
+ 
+ /* transitionend - event below is when transition ended*/
+ /* forEach - each key gets an event listener added to it */
+ /* listen on each key for when the transitionend event happens*/
+ /* when the transitionend event happens, execute removeTransition function*/ 
+ keys.forEach(key => key.addEventListener('transitionend',removeTransition));
+
+/* listen to window element for key down event 
+when the keydown event occurs, execute playSound function
+ */
+
+ window.addEventListener('keydown', playSound); 
+ </script>
+
+
+</body>
+</html>

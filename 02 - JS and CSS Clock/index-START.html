@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+    <div class="clock"> 
+      <div class="clock-face"> <!-- circle -->
+          <!--divs for the three hands of the clock-->
+      <!-- Each of these are stacked on top of each other by default
+        Note we will apply a rotate to each of the "hands" below 
+        depending on what time it currently is-->
+        <div class="hand hour-hand"></div> <!-- hours hand-->
+        <div class="hand min-hand"></div> <!-- mins hand-->
+        <div class="hand second-hand"></div> <!-- seconds hand-->
+      </div>
+    </div>
+<!-- Note that .hand exists in CSS but 
+    the classes for "hour-hand" "min-hand" "second-hand"
+    are not in the css - they are handled through javascript
+  -->
+  <style>
+    :root {
+      --hand-length: 50%;
+      --hand-top: 50%;
+      --hand-left: 0%;
+    }
+    html {
+      background: #018DED url(https://unsplash.it/1500/1000?image=881&blur=5);
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      /*width: 50%;*/ /*note because we are rotating this is actually the length of the hand*/
+      width:var(--hand-length);
+      height: 10px; /*because we rotated, this is actually the width of each hand*/
+      background: black;
+      position: absolute;
+      /*top:50%;*/ /*centerpoint of circle/of clock*/
+      top: var(--hand-length);
+      left:var(--hand-left);
+      /* 
+      NOTE:we need to fix the hands so they work like a clock's hands
+      2 issues:
+      1. default pivot is on middle of the element
+      we need the pivot to be around the right edge
+      We will use transform-origin=100% to fix this
+      2. the default of this block level div is left-to-right
+      it is horizontal.
+      we need it to be vertical.
+      wer will rotate it via transform: rotate 90 degress to fix that
+      */
+      /*default of 50% has center/pivot point in middle*/
+      /* 100% here will have the pivot point be on right edge*/
+      transform-origin: 100%; /*this will rotate from right hand size of the x-axis*/
+      /*we need the line to start vertical up and down*/
+      /*we rotate the hand 90 degress*/
+      transform: rotate(90deg); /* adjust for line starting horizontal*/
+                                /* clock lines should start at 12 oclock- vertical */
+
+      /*apply a transition */
+      transition: all 0.05s; /*apply transition*/
+      
+      /*this gives some animiation resembling ticking movement*/
+      transition-timing-function: cubic-bezier(0.1,2.7,0.58,1); 
+      /* NOTE on how we did this "cubic-bezier" transition:
+      USE Google Developer Tools inspect element
+      add a transition-timing-function 
+      and click icon for "cubic bezier editor" 
+      - if you inspect element and type "transition-timing-function" 
+      then you will see a little icon - click it and the cubic bezier editor will open 
+      that enables you to produce these types of effects and gives you the settings for them */
+    }
+
+
+
+    .second-hand{
+      background:yellow;
+      width:var(--hand-length);
+      top: var(--hand-top);
+      left: var(--hand-left);
+    }
+   
+    .min-hand{
+      background:green;
+      width:calc(var(--hand-length) * .75);
+      top: var(--hand-top);
+      left:12.5%;
+    }
+    .hour-hand{
+      background:red;
+      width:calc(var(--hand-length) * .5);
+      left:25%;
+      top: var(--hand-top);
+    }
+
+  </style>
+
+<!--take in current time from javascript -->
+<!--update the hour min second hands based on the current hour, min second -->
+  <script>
+    // in the html we reference classes for .second-hand, .min-hand, .hour-hand
+    // However, note that these classes are never actually listed in the css file.
+    // in the css there is just a ".hand" class which is a line we style
+    // in the html we reference classes for .second-hand, .min-hand, .hour-hand
+    // in JavaScript we manipulate and rotate them based on the current time.
+    //**** 2/19/23 EH: an improvement on this would be to have different lengths for each hand
+    //**** but that would necessitate some changes    
+  const secondHand = document.querySelector('.second-hand');
+  const minHand = document.querySelector('.min-hand');
+  const hourHand = document.querySelector('.hour-hand');
+
+  function setDate() {
+    // get the current date and time
+    const now = new Date();
+
+    // store currennt seconds, minutes and hours each in its own variable
+    const seconds = now.getSeconds();
+    const mins = now.getMinutes();
+    const hours = now.getHours();
+
+    // we need the hands to rotate based on the current time
+    // we need to convert the current time into a 360 degree system
+    // clocks are circles- - circles are 360 degress
+    // We need to convert the seconds into something that is base 100
+    // If we convert to base 100 then we can deal with percentages
+    // We can convert percentage of 100 to percentages of 360
+    // at 0 seconds it will be 0 degrees
+    // at 60 seconds it will have rotated 360 degrees
+    // So to get the degree of the hand, use this formula 
+    // seconds / 60 * 360
+    // 
+    // However we still have a problem: 
+    // We had to rotate the hand in the css 90 degrees
+    // so we need to add 90 to our formula:
+    // seconds / 60 * 360 + 90
+                                                    
+    // Finally there is an issue - a "glitch" when clock hits 12:00
+    // we need to address this.
+    // here is the fix but I am still understanding this part:
+    // ((seconds / 60) * 360) + 90 + mins * 360
+  
+    const secondsDegrees = ((seconds / 60) * 360) + 90 + mins * 360;
+    secondHand.style.transform = `rotate(${secondsDegrees}deg)`; // rotate by secondsDegrees value
+    // last part of the above line: + mins * 360 was to compensate for what happens when we hit 12:00 
+    // eh 2/19/23: this works but I am the least clear about it - wouldn't we need to do same for min degrees and hour degrees?
+
+    const minsDegrees = ((mins / 60) * 360) + ((seconds/60)*6) + 90;//+90 to offset the rotate as stated above
+    minHand.style.transform = `rotate(${minsDegrees}deg)`;
+                                  
+    const hourDegrees = ((hours / 12) * 360) + ((mins/60)*30) + 90;//+90 to offset the rotate as stated above
+    hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+
+  }
+
+  setInterval(setDate, 1000);
+ // setDate();
+  </script>
+</body>
+</html>
