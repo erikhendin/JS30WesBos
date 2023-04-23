@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Local Storage and Event Delegation</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <!--
+      Fish SVG Cred:
+      https://thenounproject.com/search/?q=fish&i=589236
+   -->
+
+   <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><g><path d="M495.9,425.3H16.1c-5.2,0-10.1,2.9-12.5,7.6c-2.4,4.7-2.1,10.3,0.9,14.6l39,56.4c2.6,3.8,7,6.1,11.6,6.1h401.7   c4.6,0,9-2.3,11.6-6.1l39-56.4c3-4.3,3.3-9.9,0.9-14.6C506,428.2,501.1,425.3,495.9,425.3z M449.4,481.8H62.6L43,453.6H469   L449.4,481.8z"/><path d="M158.3,122c7.8,0,14.1-6.3,14.1-14.1V43.4c0-7.8-6.3-14.1-14.1-14.1c-7.8,0-14.1,6.3-14.1,14.1v64.5   C144.2,115.7,150.5,122,158.3,122z"/><path d="M245.1,94.7c7.8,0,14.1-6.3,14.1-14.1V16.1c0-7.8-6.3-14.1-14.1-14.1C237.3,2,231,8.3,231,16.1v64.5   C231,88.4,237.3,94.7,245.1,94.7z"/><path d="M331.9,122c7.8,0,14.1-6.3,14.1-14.1V43.4c0-7.8-6.3-14.1-14.1-14.1s-14.1,6.3-14.1,14.1v64.5   C317.8,115.7,324.1,122,331.9,122z"/><path d="M9.6,385.2c5.3,2.8,11.8,1.9,16.2-2.2l50.6-47.7c56.7,46.5,126.6,71.9,198.3,71.9c0,0,0,0,0,0   c87.5,0,169.7-36.6,231.4-103.2c5-5.4,5-13.8,0-19.2c-61.8-66.5-144-103.2-231.4-103.2c-72,0-142.2,25.6-199,72.5l-50-47.1   c-4.4-4.1-10.9-5-16.2-2.2c-5.3,2.8-8.3,8.7-7.4,14.6l11.6,75L2.2,370.6C1.3,376.5,4.2,382.4,9.6,385.2z M380.9,230.8   c34.9,14.3,67.2,35.7,95.3,63.6c-10.1,10-20.8,19.2-31.9,27.5c-22.4-3.3-29.6-8.8-30.7-9.7c-4-5.7-11.8-7.7-18.1-4.4   c-6.9,3.6-9.5,12.2-5.9,19.1c1.9,3.5,7.3,10.3,22.4,16c-10.1,5.7-20.5,10.7-31.1,15.1C352.4,320.2,352.4,268.6,380.9,230.8z    M36.3,255.6l29.4,27.7c5.3,5,13.6,5.1,19.1,0.3c53.2-47.6,120.7-73.7,190-73.7c26.9,0,53.2,3.9,78.5,11.3   c-29.3,44.6-29.3,102,0,146.6c-25.3,7.4-51.6,11.3-78.5,11.3c-69,0-136.3-26-189.4-73.2c-2.7-2.4-13.4-6.3-19.1,0.3l-30.1,28.3   l5.7-40C42.2,293,36.3,255.6,36.3,255.6z"/><circle cx="398.8" cy="273.8" r="14.1"/></g></svg>
+
+<!--
+Tapas menu - you can add things and check them.
+If you refresh the page - your selections will still be there
+We are persisting the state of the list/and checkboxes/checkbox selections- with local storage
+Event delegation can address the following problem:
+When you add an event listener to an item that did not exist when the page was loaded, then in the future it won't be cclicked.
+However, with Event delegation: When I add another item to the list, i.e. "fish", 
+you can select it annd have it remain selected, and again when you refesh the page 
+the checkbox will still be there, and the selected state (checked/unchecked etc) will also still be there
+-->
+
+  <div class="wrapper">
+    <h2>LOCAL TAPAS</h2>
+    <p></p>
+
+ <!-- We will load our dishes into this unordered list | We will be listening for click on the plates-->
+ <!-- Because this UL is there when the page is first loaded-->
+ <!-- Then we will figure out did user meant to click on child check boxes within it?
+      This is called "Event Delegation": (addresses the problem of listening for events with elements that do not exist yet)
+      Hey Plates, when your children <inputs> get clicked, called
+        can you please pass this click onto them? -->
+    <ul class="plates">
+      <li>Loading Tapas...</li>
+    </ul>
+    <form class="add-items">
+      <input type="text" name="item" placeholder="Item Name" required>
+      <input type="submit" value="+ Add Item"> <!-- Add item to tapas list -->
+    </form>
+  </div>
+
+<script>
+/* We will store all of our data in an array of objects that ccontains the name of the array as well as the 
+status, checked or unchecked
+*/
+
+  const addItems = document.querySelector('.add-items');  /* form element with text field and submit button */
+  const itemsList = document.querySelector('.plates');
+  // on page load if there is something in localStorage. If not then just use an empty array
+  const items = JSON.parse(localStorage.getItem('items')) || [];
+
+  function addItem(e){
+    ///console.log('Hello');
+    // stop the page from reloading -- by default submit of form will reload the page or send the data to an external resource (generally on the server side)
+    ///// in this case what we are doing is on the client side
+    e.preventDefault(); 
+                // below line: "this" is the form we 'submit' via the event we passed - we can look inside of it 
+                // note that "name=item" is an attribute of the input type=text tag where we enter the text
+                // <input type="text" name="item" placeholder="Item Name" required>
+                // so we are creating a variable called text here and we are storing the value of the input text field in it
+    const text = (this.querySelector('[name=item]')).value;
+
+    // each item will have text of the item name, and a "done" state of false
+    const item = {
+      text: text, /* will contain the text we entered in the input field */  
+      done: false /* by default when an item is added, it will not be checked, we will use "done=false" for this purpose */
+    };
+    
+    items.push(item); // put the item into the items array
+    populateList(items, itemsList); // pass list of items(array of items), and our itemsList(destination html)
+    // update localStorage each time you add an item.
+    localStorage.setItem('items', JSON.stringify(items));
+    this.reset(); // clear the form once we add the item
+  }
+
+  // populateList will create the HTML where the items are actually added to the list
+  // we need the list of plates to populate (we have stored this list in the items array)
+  // we will make the default an empty array in case there are no items
+  // this function enables us to pass in an array of plates and specify a destination html element
+  function populateList(plates = [], platesList) { // platesList is the place we put the html list
+    // we will place in the items list into the plates list.
+                          //map over the list of items 
+                          // loop over every single item in the array 
+                          // return the html with list items populated
+    platesList.innerHTML = plates.map((plate, i) => {
+                                            //note in below input id= value and label for= value are the same - this is how we link the two
+      // We need to know whether these items are going to be checked or not
+      // if it has a property of 'done' put "checked" attribute in the input field, if not then input should not be checked
+      return `
+        <li>                      
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''}/>
+          <label for="item${i}">${plate.text}</label>
+        </li>
+      `;
+    }).join(''); // map is going to return an array, but what we need is one big string
+                  // join will turn it into one big string
+  }
+
+
+// toggleDone() - need to persist the status
+  // event delegation- listen for a clicck on something "higher"
+// then inside of it we check if it is the actual thing that we want
+  function toggleDone(e) {
+    // check if the target matches the thing we are looking for -the input
+    if(!e.target.matches('input')) return; // skip this unless it's an input
+// go to items array - find the one that was checked, and set "done" to be true or false accordingly depending on what state it's in
+    const el = e.target;
+    //console.log(el.dataset.index);
+    const index = el.dataset.index; // will tell you the index of the corresponding item in the array. 
+    // if done is true set to opposite/false - each input has a data-index value so we can use that to reference where it is in the array
+    items[index].done = !items[index].done;  // flip flopping betwenen true and fiake
+    // set items array into localStorage, convert to string ("stringify" it so you can store them in localStorage
+    localStorage.setItem('items', JSON.stringify(items)); //localStorage only takes strings
+    // visually update the page for any changes
+    populateList(items, itemsList);
+  }
+
+/*
+  Every time we make change , it will be mirroreed to localStorage, re-rennder the entire list
+  Better would be if we just updated for just one item (such as you would do in React.js)
+*/
+
+  // listen for submit event - when someone submits this form we will add an item to the list.
+  addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
+  populateList(items, itemsList);
+
+/*
+Every time we make a change,
+We are going to mirror that to localStorage
+And re-render the entire list
+challenge:
+-Make a button 
+-that says clear all - clears all selections
+-that says delete - will delete all of them 
+-button that says check all - that will check all checkboxes
+All buttons trigger actions thatt will be mirrored to localStorage, and re-run populateList(items, itemsList)
+*/
+
+/*Local Storage - you can store your data in localStorage
+There is an object in the browser called localStorage
+It is a list of things that have been saved to the domain - only locally
+You are able to save text to the browser
+and even when you reload the page you are still able to save text out of it
+(If you go to Chrome DevTools > Application tab > Local Storage > click on the domain you are working)
+You will see Key and Value 
+This is where we are storing "done=false etc" 
+*/
+
+
+</script>
+
+
+</body>
+</html>
+

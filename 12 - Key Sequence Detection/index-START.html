@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+<script>
+// key sequencing detection!
+//whenever someone presses a key we are going to push it into an array
+const pressed = []; // holder for key presses
+const secretCode='erik';
+
+  // listen for key up event 
+  window.addEventListener('keyup', (e) => {
+    console.log(e.key); // tell us key that we pressed
+    pressed.push(e.key); // whenever someone presses an item, push key into array
+
+
+    // trim the array to be the maximum number of characters that wwe need
+    // So make the length of the pressed array the length of the "secret code"
+    // so say secretCode is six letters we would look for six characters
+    // We want to count from the back (from the end, so length of array-1)
+    // for example if we typed wesbosiscool 
+    //- if we started splicing/trimming from the beginning we would be cutting out the characters we need
+    // to go from the end we use -secretCode.length - 1
+    /// so if it's six letters, then that will go from the back in to position 5(the sixth character because position 0 is the first character) 
+// Trim from end using then pressed.length - secretCode.length
+// so it should always just have six letters
+// or more to the point - it should always be the same number of characters as the "secret code" 
+
+    //check if array contains secret code we are looking for
+    // pressed.join() will concatenate letters in array to form a string.
+    // so if the string includes the secret code...
+    if(pressed.join('').includes(secretCode)) {
+      // woo hoo!
+      console.log('DING DING!');
+      // show some unicorns
+      cornify_add();
+    }
+    console.log(pressed);
+
+  })
+
+</script>
+</body>
+</html>
