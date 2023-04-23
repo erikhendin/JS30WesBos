@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Console Tricks!</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+  <p onClick="makeGreen()">×BREAK×DOWN×</p>
+
+  <script>
+    const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+
+    function makeGreen() {
+      const p = document.querySelector('p');
+      p.style.color = '#BADA55';
+      p.style.fontSize = '50px';
+    }
+
+    // Regular
+    console.log('hello');
+
+    // Interpolated
+    console.log('hello I am a %s string!', 'great');
+    // Styled
+  //  console.log('%c I am some great text', 'font-size: 30px;background:red; text-shadow: 10px 10px 0 blue');
+
+    // warning!
+    console.warn('OH NOOO');
+    // Error :|
+    console.error('Shoot!');
+    // Info
+    console.info('Crocodiles eat 3-4 people per year');
+
+    // Testing
+    // console.assert will only fire if condition is untrue/fails
+    console.assert(1 === 1, 'That is wrong!');
+
+    const p = document.querySelector('p');
+    // if you cannot find a paragraph with class .ouch, display the text in console
+    console.assert(p.classList.contains('ouch'), 'That is wrong!');
+    // so you can test for something:
+    // if it is false, it  will throw an error into your console
+    // if it is true, nothingg will happen - but nnotice no "if" statement was needed
+
+    // clearing
+    console.clear(); // will clear your console.
+
+    // Viewing DOM Elements
+    console.log(p); // shows you the actual element, but not its properties/methods etc
+
+    // this will give you a dropdown with a ton of info such as classList, children, data etc
+    console.dir(p);
+    // if you want to see the methods you open the "prototype" from the dropdown
+    // 
+
+    console.clear();
+    // Grouping together
+    const puppies = [{ name: 'Pookie', age: 3 }, { name: 'Frankie', age: 5 }];
+    /*
+    puppies.forEach(puppy => {
+      console.log(`this is ${puppy.name}`);
+      console.log(`${puppy.name} is ${puppy.age * 7} dog years old`);
+    })  
+    */
+   // above works, but below notice console.group() which groups each puppy 'statement' together
+   /*
+    puppies.forEach(puppy => {
+      console.group(`${puppy.name}`);
+      console.log(`this is ${puppy.name}`);
+      console.log(`${puppy.name} is ${puppy.age * 7} dog years old`);
+      console.groupEnd(`${puppy.name}`);
+    })  
+*/ // below is same thing but with groupCollapsed() which collapses items 
+    puppies.forEach(puppy => {
+      console.groupCollapsed(`${puppy.name}`);
+      console.log(`this is ${puppy.name}`);
+      console.log(`${puppy.name} is ${puppy.age * 7} dog years old`);
+      console.groupEnd(`${puppy.name}`);
+    })  
+
+    // counting
+    // console.count() will count however many times you use a specific word, dom node, 
+    // below will display how many times we have counted
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Steve');
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Steve');
+    console.count('Wes');
+    console.count('Wes');
+    console.count('Steve');
+    console.count(p);
+
+    // timing
+    // you can start a timer
+    // you can see how long somethingg takes
+/*    
+    console.time('fetching data');
+    fetch('https://api.github.ccom/users/wesbox')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetching data');
+        console.log(data);
+      });
+*/
+  // Display in a nice table.
+      // display in table- really for array where each element has same properites
+      // will display in a nice table for you
+    console.table(puppies);
+  </script>
+</body>
+</html>

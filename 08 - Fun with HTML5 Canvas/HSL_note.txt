@@ -1,0 +1,10 @@
+Go to website "mother effing hsl"
+https://mothereffinghsl.com/
+HSL is essentially "the rainbow" but you can essentially select pieces of the rainbow
+H = Hue  
+S = Saturation
+L = Lightness from black to white
+
+programmatically pick the different pieces
+
+

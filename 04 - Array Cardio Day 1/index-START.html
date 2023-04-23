@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+  <div class="mw-category">
+    <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevards_of_Paris" title="Boulevards of Paris">Boulevards of Paris</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/City_walls_of_Paris" title="City walls of Paris">City walls of Paris</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Thiers_wall" title="Thiers wall">Thiers wall</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Wall_of_Charles_V" title="Wall of Charles V">Wall of Charles V</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Wall_of_Philip_II_Augustus" title="Wall of Philip II Augustus">Wall of Philip II Augustus</a></li>
+        <li><a href="https://en.wikipedia.org/Boulevard_de_la_Madeleine">Boulevard de la Madeleine</a></li>
+    </ul>
+    <ul>
+        <li><a href="https://en.wikipedia.org/Boulevard_de_Magenta"></a></li>
+        <li><a href="https://en.wikipedia.org/wiki/City_gates_of_Paris" title="City gates of Paris">City gates of Paris</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Haussmann%27s_renovation_of_Paris" title="Haussmann&#039;s renovation of Paris">Haussmann&#039;s renovation of Paris</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevards_of_the_Marshals" title="Boulevards of the Marshals">Boulevards of the Marshals</a></li>
+    </ul>
+    
+    <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Auguste-Blanqui" title="Boulevard Auguste-Blanqui">Boulevard Auguste-Blanqui</a></li>
+    </ul>
+    
+    <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Barb%C3%A8s" title="Boulevard Barbès">Boulevard Barbès</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Beaumarchais" title="Boulevard Beaumarchais">Boulevard Beaumarchais</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_de_l%27Amiral-Bruix" title="Boulevard de l&#039;Amiral-Bruix">Boulevard de l&#039;Amiral-Bruix</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Mortier" title="Boulevard Mortier">Boulevard Mortier</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Poniatowski" title="Boulevard Poniatowski">Boulevard Poniatowski</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Soult" title="Boulevard Soult">Boulevard Soult</a></li>
+    </ul>    
+</div>
+
+  <script>
+    // Get your shorts on - this is an array workout!
+    // ## Array Cardio Day 1
+
+    // Some data we can work with
+
+    const inventors = [
+      { first: 'Albert', last: 'Einstein', year: 1879, passed: 1955 },
+      { first: 'Isaac', last: 'Newton', year: 1643, passed: 1727 },
+      { first: 'Galileo', last: 'Galilei', year: 1564, passed: 1642 },
+      { first: 'Marie', last: 'Curie', year: 1867, passed: 1934 },
+      { first: 'Johannes', last: 'Kepler', year: 1571, passed: 1630 },
+      { first: 'Nicolaus', last: 'Copernicus', year: 1473, passed: 1543 },
+      { first: 'Max', last: 'Planck', year: 1858, passed: 1947 },
+      { first: 'Katherine', last: 'Blodgett', year: 1898, passed: 1979 },
+      { first: 'Ada', last: 'Lovelace', year: 1815, passed: 1852 },
+      { first: 'Sarah E.', last: 'Goode', year: 1855, passed: 1905 },
+      { first: 'Lise', last: 'Meitner', year: 1878, passed: 1968 },
+      { first: 'Hanna', last: 'Hammarström', year: 1829, passed: 1909 }
+    ];
+
+    const people = [
+      'Bernhard, Sandra', 'Bethea, Erin', 'Becker, Carl', 'Bentsen, Lloyd', 'Beckett, Samuel', 'Blake, William', 'Berger, Ric', 'Beddoes, Mick', 'Beethoven, Ludwig',
+      'Belloc, Hilaire', 'Begin, Menachem', 'Bellow, Saul', 'Benchley, Robert', 'Blair, Robert', 'Benenson, Peter', 'Benjamin, Walter', 'Berlin, Irving',
+      'Benn, Tony', 'Benson, Leana', 'Bent, Silas', 'Berle, Milton', 'Berry, Halle', 'Biko, Steve', 'Beck, Glenn', 'Bergman, Ingmar', 'Black, Elk', 'Berio, Luciano',
+      'Berne, Eric', 'Berra, Yogi', 'Berry, Wendell', 'Bevan, Aneurin', 'Ben-Gurion, David', 'Bevel, Ken', 'Biden, Joseph', 'Bennington, Chester', 'Bierce, Ambrose',
+      'Billings, Josh', 'Birrell, Augustine', 'Blair, Tony', 'Beecher, Henry', 'Biondo, Frank'
+    ];
+    
+    // Array.prototype.filter()
+    // 1. Filter the list of inventors for those who were born in the 1500's
+    //
+    /*
+    const inven1500s = inventors.filter(function(inventor) {
+      if(inventor.year>=1500 && inventor.year <1600) {
+        return true;
+      }
+    });
+    */
+   // above can be much simpler by using arrow function - return true is implicit
+    const inven1500s = inventors.filter(inventor => (inventor.year>=1500 && inventor.year <1600));
+    console.table(inven1500s);
+
+
+    // Array.prototype.map() - map does someting with an array and returns an array of same length
+    // map will always return the same number of items that you give it
+    // 2. Give us an array of the inventors first and last names
+    const fullNames = inventors.map(inventor => `${inventor.first} ${inventor.last}`);
+    console.log(fullNames);
+    console.table(fullNames);
+
+    // Array.prototype.sort()
+    // with sort you get two items and you are asked to sort those two items.
+    // is person A older than person B, then if so A goes first etc..
+    // 3. Sort the inventors by birthdate, oldest to youngest
+/*
+    const ordered = inventors.sort(function(firstPerson, secondPerson) {
+      if (firstPerson.year > secondPerson.year) {
+        return 1;
+      }else {
+        return -1;
+      }
+    });
+*/
+/*we can cut the above way down using implicit return and ternary operator :*/
+const ordered = inventors.sort((firstPerson, secondPerson) => firstPerson.year > secondPerson.year ? 1 : -1);
+    
+console.table(ordered);
+
+    // Array.prototype.reduce()
+    // reduce() much like a map - it takes items in and sorts them, or filters them down, etc
+    // reduce() allows you to build something on every single item in array
+    // so where you alternatively might do a loop on every item and add to array,
+    // reduce() simplifies this
+
+    // 4. How many years did all of the inventors live all together? (what was their combined age added up)
+                                      // "total" will "hold" the rolling sum amount - to start it will not have any value
+    const totalYears = inventors.reduce((total, inventor) => {
+      return total + (inventor.passed - inventor.year);  // passed-year = how many years they lived.
+    }, 0); // we use the 0 here because total, the first time around, has no value (undefined) - so we give it zero
+    // otherwise "undefined" cannot be added 
+    console.log(totalYears);
+
+
+    // 5. Sort the inventors by years lived
+    const oldest = inventors.sort(function(a, b) {
+      const lastInventor = a.passed - a.year;
+      const nextInventor = b.passed - b.year;
+      return lastInventor > nextInventor ? -1 : 1;
+    });
+    console.table(oldest);
+
+/* NOTE #6 is for console only on the link below 
+  but for the purpose of this html page I have included some test html excerpt 
+  so I could still see the code in action on this page */
+    // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
+    // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+    const category = document.querySelector('.mw-category');
+    // querySelector returns a nodeList but not an array 
+    // we need the data in an array so we can harness the methods of Array
+    // for example nodeList does not have the map() or filter() methods but Array does
+    // so we need to:
+    // >>>>>>1.Get the links within children elements of parent div with class mw-category
+    // >>>>>>2.Put it into an array so we can use the Array methods to filter the list
+    const links = Array.from(category.querySelectorAll('a'));
+
+    // We want to filter that list of links
+    // we also only want the text content we do not need the rest of the link
+    // this way we have a text list of boulevard names we can filter out  
+    const de = links
+                 .map(link => link.textContent)  //use map() to get the text content of each link
+                 .filter(streetName => streetName.includes('de')); // filter out only items that have "de"
+    console.log("Here is a list of Boulevards in Paris that contain 'de' anywhere in the name");
+    console.log(de.join(` | `));
+    console.log("#############################################");
+
+/* Note on sort()
+The sort() Function is used to determine 
+the order of the elements. 
+It is expected to return 
+~~a negative value if the first argument is less than the second argument, 
+~~zero if they're equal, 
+~~a positive value otherwise. 
+If omitted, the elements are sorted in ascending, ASCII character order
+*/
+
+    // 7. sort Exercise
+    // Sort the people (from the people array) alphabetically by last name
+    // people array - each element is a text string containing last name, first name
+    // we will need to do some work to the elements to be able to sort by last name
+    const alpha = people.sort((a, b) => {
+      // change order to last name first, and remove the comma
+      // we are creating an array which contains separate first and last name
+      /// so peoplee array each element has a full text string of lastname, firstname
+      // we are gogoing to split() and remove the comma and space and create a new array for each of the elements
+      // this new array wiill contain first element will be last name and second element will be first name
+      // what we care about is the last name becuase we want to sort the people array by the last name using the below code
+      const [aLast, aFirst] = a.split(', '); // this enables us to compare last names and sort by last names
+      const [bLast, bFirst] = b.split(', '); 
+      // return list sorted by last name:
+      return aLast > bLast ? 1 : -1;
+    });
+    console.log('ERIK OVER HERE!');
+    console.log(alpha);
+
+    // 8. Reduce Exercise
+    // Sum up the instances of each of these
+    const myDataArray = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck', 'pogostick' ];
+    
+    const transportation = myDataArray.reduce(function(obj, item) {
+    //start with a blank object
+    //every time we loop over one
+    //we first see - is there even a zero there to work with at all?
+    //if not we need to make an entry for that,
+    // and then we go ahead and increment it
+    // this way if we add new data points it will still work.
+      if(!obj[item]){ // if there is no object item
+        obj[item]=0; // then object item is equal to zero
+      }
+      obj[item]++;
+      return obj;
+    }, {}); // the empty array is because we are starting with a blank object
+console.log(transportation)
+
+  </script>
+</body>
+</html>

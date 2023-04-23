@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+This is a Type-Ahead example using JavaScript:
+// On the screen we enter a city or a state in an input field.
+// behind the scenes we have a cities/states list 
+// this list is a json file at an external URL with city, state and population
+/**
+Sample json from JSON result set - which will be one element of our "cities" array 
+    {
+        "city": "New York", 
+        "growth_from_2000_to_2013": "4.8%", 
+        "latitude": 40.7127837, 
+        "longitude": -74.0059413, 
+        "population": "8405837", 
+        "rank": "1", 
+        "state": "New York"
+    }, 
+*/
+// Whenever letters we type in the input field "match" either the city name or state name
+// Matching results will appear below the input search box, added as items to existing unordered list
+// So Behind the scenes we have an external list that we are pulling from
+// we are filtering down the city/state data to a subset of the list 
+// based on user's selections
+// We are also formatting the html/css to emphasize the matches
+// and give a comma to the population number
+
+High level we will:
+-fetch data
+-find matches / filter the data
+-display (and format) data
+-setup event listeners to listen for typed entries
+to trigger this to happen in real time ("type ahead")
+
+
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Type Ahead 👀</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+  <form class="search-form">
+    <!-- input field where user will enter city or state -->
+    <input type="text" class="search" placeholder="City or State">
+    <!-- UL Unordered List where matches will appear -->
+    <ul class="suggestions">
+      <li>Filter for a city</li>
+      <li>or a state</li>
+    </ul>
+  </form>
+<script>
+
+
+// LIST OF CITIES/STATES - json file 
+const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+
+
+// Create Empty Array which will store the list of locations/places
+const cities = [];
+
+// HOW TO GRAB THE DATA?: 
+// we use built-in browser API method called "fetch()"
+// we fetch the list - stored in a variable called endpoint
+// fetch() returns what is called a "promise" -- 
+// The promise contains a raw data blob that needs to be converted into json
+// we have a blob.json() method which returns yet another "promise"
+
+// fetch endpoint list of cities
+fetch(endpoint) // fetch enpoint returns a "promise"
+  .then(blob => blob.json()) // convert to json
+  .then(data => cities.push(...data)); // put json data into the empty cities array
+                      // what is ...  ?
+                      // This - the three dots ... is ES6  
+                      // this will "spread" cities data into the push() method
+                      // so that each and every item goes into cities area
+
+// Filter down the data into a "subset"
+// function takes the word to match along with the cities array 
+// find and return "records"(places) with match of either city or state
+function findMatches(wordToMatch, cities){
+  return cities.filter(place => { // filter the data
+    //cities is the array - place is each element of the array
+    // in this case place is an array itself
+    // remember each set of data from json contains: city, state, latitude, longitude, population, etc. 
+    
+    // we need to check the city in the json for a match
+    // we need to check the state in the json for a match
+    
+    // We need to figure out if the city or state matches what was searched/typed by user
+    // However, what is returned is a variable
+    // How do we put a variable into a regular expression?
+    // we can use the RegExp() method
+    const regex = new RegExp(wordToMatch, 'gi');
+                                          // what is 'gi'
+                                           // g = global
+                                           // i = case insensitive 
+
+    // we return the listing that matches:
+    // For either the city or the state that matches 
+    return place.city.match(regex) || place.state.match(regex)
+    // remember: filter() function returns an array containing the element that satisfies the condition 
+  });
+}
+
+// We format population number with a comma 
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// display the matches
+function displayMatches(){
+  //console.log(this.value);
+
+  // array to hold results that match
+  const matchArray = findMatches(this.value, cities);
+  //console.log(matchArray);
+  
+  // format the results 
+  const html = matchArray.map(place => {
+  // use regular expression to check for match of the city name, 
+  // use variable to store the matching data
+  // we will use that regex variable to replace the word that it matches
+  // with a span that has a class with a highlight (class "hightlightMe") 
+  // we want to highlight the text that matches
+  const regex = new RegExp(this.value, 'gi');
+  const cityName = place.city.replace(regex, `<span class="hightlightMe">${this.value}</span>`);
+  const stateName = place.state.replace(regex, `<span class="hightlightMe">${this.value}</span>`);
+  // note the use of variables   
+  return `
+    <li>
+      <span class="name">${cityName}, ${stateName}</span>
+      <span class="population">${numberWithCommas(place.population)}</span>
+    </li>
+    `;
+  }).join(''); // turn array with multiple items into one big string
+
+  // update the Unordered list with html results (stored in variable "html")
+  suggestions.innerHTML=html;
+}
+
+const searchInput = document.querySelector('.search');
+const suggestions = document.querySelector('.suggestions');
+
+// create listeners to respond to change in value in input field
+// when value changes > execute displayMatches function
+searchInput.addEventListener('change', displayMatches);
+// when user keyup > execute displayMatches function
+searchInput.addEventListener('keyup', displayMatches);
+
+</script>
+</body>
+</html>

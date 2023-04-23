@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Array Cardio 💪</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+  <p><em>Psst: have a look at the JavaScript Console</em> 💁</p>
+<!-- -->
+<div class="mw-category">
+    <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevards_of_Paris" title="Boulevards of Paris">Boulevards of Paris</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/City_walls_of_Paris" title="City walls of Paris">City walls of Paris</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Thiers_wall" title="Thiers wall">Thiers wall</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Wall_of_Charles_V" title="Wall of Charles V">Wall of Charles V</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Wall_of_Philip_II_Augustus" title="Wall of Philip II Augustus">Wall of Philip II Augustus</a></li>
+        <li><a href="https://en.wikipedia.org/Boulevard_de_la_Madeleine">Boulevard de la Madeleine</a></li>
+    </ul>
+    <ul>
+        <li><a href="https://en.wikipedia.org/Boulevard_de_Magenta"></a></li>
+        <li><a href="https://en.wikipedia.org/wiki/City_gates_of_Paris" title="City gates of Paris">City gates of Paris</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Haussmann%27s_renovation_of_Paris" title="Haussmann&#039;s renovation of Paris">Haussmann&#039;s renovation of Paris</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevards_of_the_Marshals" title="Boulevards of the Marshals">Boulevards of the Marshals</a></li>
+    </ul>
+    
+    <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Auguste-Blanqui" title="Boulevard Auguste-Blanqui">Boulevard Auguste-Blanqui</a></li>
+    </ul>
+    
+    <ul>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Barb%C3%A8s" title="Boulevard Barbès">Boulevard Barbès</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Beaumarchais" title="Boulevard Beaumarchais">Boulevard Beaumarchais</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_de_l%27Amiral-Bruix" title="Boulevard de l&#039;Amiral-Bruix">Boulevard de l&#039;Amiral-Bruix</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Mortier" title="Boulevard Mortier">Boulevard Mortier</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Poniatowski" title="Boulevard Poniatowski">Boulevard Poniatowski</a></li>
+        <li><a href="https://en.wikipedia.org/wiki/Boulevard_Soult" title="Boulevard Soult">Boulevard Soult</a></li>
+    </ul>    
+</div>
+<!-- -->
+
+  <script>
+
+    // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
+    // https://en.wikipedia.orghttps://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
+//    const category = document.querySelector('.mw-category ul li a');
+     const category = document.querySelector('.mw-category');
+     const links = Array.from(category.querySelectorAll('a'));
+     const de = links
+                 .map(link => link.textContent)
+                 .filter(streetName => streetName.includes('de'));
+    console.log("Here is a list of Boulevards in Paris that contain 'de' anywhere in the name");
+    console.table(de);
+
+  </script>
+</body>
+</html>

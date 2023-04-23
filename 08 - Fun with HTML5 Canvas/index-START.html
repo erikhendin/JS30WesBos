@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+<canvas id="draw" width="800" height="800"></canvas>
+<script>
+  // grab canvas and put it in a variable
+  const canvas = document.querySelector('#draw');
+
+  // You need the canvas to draw 
+  // however in order to do this in HTML
+  // you need to first grab the "context" of the canvas
+  //  And we specify 2D (you can also do 3D but that is for another example)
+  // create variable and store the context  
+  const ctx = canvas.getContext('2d');
+
+  // size up the canvas to the default width and height of the browser window
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // Now we need establish base settings with stroke style, line cap and join
+  // when you draw on something it needs to be a color (strokeStyle will reference a css ID)
+  // determine what the end of the line should look like
+  // should it be squared off when a line meets or "joins" another line, 
+  // or should there be rounded corners when they meet
+  // there are many options availabble for rounded and squared
+  // let's make it rounded
+  ctx.strokeStyle = '#BADA55'; // give the stroke a color
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.lineWidth = 100;
+
+  // blend modes - see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
+  // we can use blend modes like you may see in photoshop
+  ctx.globalCompositeOperation='multiply';
+
+  // Now we need a couple of dummy variables
+  // isDrawing will serve as a flag to determine when to draw
+  // we will need to address x and y coordinates of drawing start and end.
+
+  // In essence drawing with a mouse on screen is:
+  // when I click down on this element, 
+  // I move my mouse, I let go, 
+  // and I move my mouse again,
+// nothing should happen when I move my mouse, 
+// it should only draw when my cursor/mouse pointer is actually "down".
+// So what we will do is create a "flag" with the variable "isDrawing"
+// we will set it to false by default
+// >when we click down>>, we will set isDrawing to true
+// when you click up > when you let go of the button > we will set it to false
+// isDrawing is our flag to tell us 
+// whether we should draw to this canvas
+// or if we are just moving our mouse 
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0; 
+// when we draw to a canvas, we draw from one point to another
+// so you need a starting x and y and an ending x and y
+// you can not just tell it to draw
+// a line needs a start and stop - thus the lastx and lasty variables
+
+// Incorporate cool color effect using HSL values
+// reference:e https://mothereffinghsl.com/
+let hue=0; // variable to manipulate hue (from hue, saturation, lightness)
+let direction = true; // we will use this to handle if line is growing or shrinking in width
+
+// draw function:
+// we will call this whenever we move our mouse on top of the canvas
+function draw(e) {
+  if(!isDrawing) return; // this will stop the function from running 
+                        // when they are not moused down
+                        // we only want to draw on canvas with the mousedown
+  console.log(e);
+
+  // set hue saturation and lightness - note the hue variable
+  ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+  
+  // drawing - start path on the context using beginPath() method
+  ctx.beginPath();
+  // start with x and y - we defined these lastX and lastY variables earlier in code
+  ctx.moveTo(lastX, lastY);
+  // and move to x and y
+  ctx.lineTo(e.offsetX, e.offsetY); // e.offsetX is a built-in property of the moouse event
+  // we need to call stroke to see anything on the page
+  ctx.stroke(); // we need to this to actually draw
+  // we need to update the x and y to whereever user's mouse is when it clicked/moused down.
+  // update lastX and lastY variables to be wherever there were
+  //lastX = e.offsetX;
+  //lastY = e.offsetY;
+  // you can rewrite above two lines like this:
+  [lastX, lastY] = [e.offsetX, e.offsetY];  // in ES6 tthis is call the structuring of an array
+
+  // increment hue each time user draws - this will give it a very for cool gradient/rainbow effect
+  hue++;
+  if (hue >= 360) {
+    hue = 0;
+  }
+
+  // increment lineWidth from 0 to 100 
+  // but once we hit 100 we will go back from 100, 99, 98 etc
+  // so if it is greater than 100, or less than 1 flip the direction
+  if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+    direction = !direction;
+  }
+
+  // depending on what the direction is, we either increment the line width
+  // or if the direction is going the other way, we decrement the line width
+  if(direction) {
+    ctx.lineWidth++;
+  } else {
+    ctx.lineWidth--;
+  }
+
+}
+//listen for mouse events on the canvas
+
+// upon mousedown > as soon as the person clicks down the mouse to start it,
+// before we do a mouse move,
+// we will update the last X and Y 
+canvas.addEventListener('mousedown', (e) => {
+  isDrawing=true;
+  // update lastX and lastY so we are starting at current mousedown x y point (rather than starting at 0, 0)
+  [lastX, lastY] = [e.offsetX, e.offsetY];  // in ES6 tthis is call the structuring of an array
+});
+
+// other event listeners listening to the mousemove down or mouseup and mouseout to make sure drawing stops properly as intended
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', () => isDrawing = false);
+canvas.addEventListener('mouseout', () => isDrawing = false);
+
+</script>
+<style>
+  html, body {
+    margin: 0;
+  }
+
+</style>
+
+</body>
+</html>
